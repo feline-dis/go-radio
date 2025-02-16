@@ -32,7 +32,7 @@ type Message struct {
 
 type WebsocketController struct {
 	clients         map[*websocket.Conn]bool
-	sendOnNewClient []*Message
+	sendOnNewClient *Message
 }
 
 var upgrader = websocket.Upgrader{}
@@ -63,8 +63,8 @@ func (wsc *WebsocketController) RegisterRoutes(r *http.ServeMux) {
 
 		wsc.clients[conn] = true
 
-		for _, message := range wsc.sendOnNewClient {
-			conn.WriteJSON(message)
+		if wsc.sendOnNewClient != nil {
+			conn.WriteJSON(wsc.sendOnNewClient)
 		}
 	})
 
@@ -82,5 +82,5 @@ func (wsc *WebsocketController) Broadcast(message *Message) {
 }
 
 func (wsc *WebsocketController) BroadcastOnNewClient(message *Message) {
-	wsc.sendOnNewClient = append(wsc.sendOnNewClient, message)
+	wsc.sendOnNewClient =  message
 }

@@ -76,7 +76,6 @@ func (ds *DownloadService) EnsureDownloaded(song *ingest.Song) error {
 
 func (ds *DownloadService) QueueDownload(song *ingest.Song) error {
 	ds.activeJobs.Add(1) // Increment before queuing
-	fmt.Printf("Queuing download for %s\n", song.URL)
 	select {
 	case ds.downloadQueue <- song:
 		return nil
@@ -111,7 +110,6 @@ func (ds *DownloadService) worker(workerID int) {
 	for {
 		select {
 		case song := <-ds.downloadQueue:
-			fmt.Printf("Worker %d downloading %s\n", workerID, song.URL)
 			if err := ds.downloadFile(song); err != nil {
 				fmt.Printf("Worker %d failed to download %s: %v\n", workerID, song, err)
 			}
@@ -131,11 +129,9 @@ func (ds *DownloadService) downloadFile(song *ingest.Song) error {
 	var ytdlpResponse *YtdlpResponse
 	var fileInfo os.FileInfo
 	if info, err := os.Stat(path.Join(ds.CachePath, song.ID()+".mp3")); err == nil {
-		fmt.Printf("File %s already exists, getting metadata\n", song.ID())
 		meta, err := os.ReadFile(path.Join(ds.CachePath, song.ID()+".json"))
 		if err != nil {
 			// file exists but metadata does not, download it
-			fmt.Printf("Metadata for %s does not exist, downloading\n", song.ID())
 			ytdlpResponse, err = ds.downloadJSON(song.URL)
 		}
 		if err := json.Unmarshal(meta, &ytdlpResponse); err != nil {

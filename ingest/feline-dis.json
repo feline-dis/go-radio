@@ -1,6 +1,6 @@
 {
   "name": "feline-dis",
-  "pfp_url": "https://cdn.discordapp.com/avatars/852576595072366080/4",
+  "pfp_url": "https://cdn.discordapp.com/avatars/541806831169961984/39356ad1c1e7b3160c7c2aff13c234c3?size=1024",
   "songs": [
     {
       "title": "Fly Move",
@@ -11,6 +11,31 @@
       "title": "End Eric Sparrow and the Life of Him",
       "artist": "Hot Mulligan",
       "url": "https://www.youtube.com/watch?v=4SYggXTI-tU"
+    },
+    {
+      "title": "Lost You",
+      "artist": "Zeds Dead",
+      "url": "https://www.youtube.com/watch?v=VJm7IPrBmLY"
+    },
+    {
+      "title": "The Less I Know The Better",
+      "artist": "Tame Impala",
+      "url": "https://www.youtube.com/watch?v=2SUwOgmvzK4"
+    },
+    {
+      "title": "Let U Go",
+      "artist": "lucidbeatz",
+      "url": "https://www.youtube.com/watch?v=fXF59UWr-tA"
+    },
+    {
+      "title":  "Play With Me",
+      "artist": "Sara Landry",
+      "url": "https://www.youtube.com/watch?v=Tr1QR3GwXck"
+    },
+    {
+      "title": "OVER NOW",
+      "artist": "Overmono",
+      "url": "https://www.youtube.com/watch?v=_0Sn1NhEy8Q"
     }
   ]
 }

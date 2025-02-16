@@ -51,7 +51,7 @@ func NewServer(config ServerConfig) *Server {
 	fileController.RegisterRoutes()
 
 	orc := orchestrator.NewOrchestrator(downloadService, pickerService, webSocketController)
-	go orc.Start()
+	orc.Start()
 
 	return &Server{
 		config:          config,

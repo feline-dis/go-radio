@@ -1,6 +1,7 @@
 package picker
 
 import (
+	"fmt"
 	"math/rand"
 	"sort"
 	"strings"
@@ -44,6 +45,8 @@ func NewPickerService(ds *ingest.DataService) *PickerService {
 }
 
 func (ps *PickerService) NextSong() *ingest.Song {
+	fmt.Println("quePos: ", ps.quePos)
+	fmt.Println("len(ps.queue): ", len(ps.queue))
 	if ps.quePos >= len(ps.queue) {
 		ps.ShuffleQueue()
 		ps.quePos = 0
@@ -55,25 +58,27 @@ func (ps *PickerService) NextSong() *ingest.Song {
 }
 
 func (ps *PickerService) ShuffleQueue() {
-	// Calculate the size for splitting the queue in half
-	halfQueueSize := len(ps.queue) / 2
+	fmt.Println("Shuffling queue...")
 
-	// Create new slices for reorganization
-	newUnpickedSongs := make([]*ingest.Song, halfQueueSize)
-	newQueue := make([]*ingest.Song, halfQueueSize+len(ps.unpicked))
+	// Combine current queue and unpicked songs
+	allSongs := make([]*ingest.Song, len(ps.queue)+len(ps.unpicked))
+	copy(allSongs, ps.queue)
+	copy(allSongs[len(ps.queue):], ps.unpicked)
 
-	// Move second half of current queue to newUnpickedSongs
-	copy(newUnpickedSongs, ps.queue[halfQueueSize:])
+	// Shuffle all songs
+	shuffled := SpotifyShuffle(allSongs)
 
-	// Move first half of current queue to start of newQueue
-	copy(newQueue[:halfQueueSize], ps.queue[:halfQueueSize])
+	// Calculate new sizes (maintaining original ratio)
+	totalSize := len(shuffled)
+	queueSize := 2 * (totalSize / 3) // Same ratio as in SyncData
 
-	// Move all current unpickedSongs to end of newQueue
-	copy(newQueue[halfQueueSize:], ps.unpicked)
+	// Create new queue and unpicked slices
+	ps.queue = make([]*ingest.Song, queueSize)
+	ps.unpicked = make([]*ingest.Song, totalSize-queueSize)
 
-	// Update the service's slices
-	ps.unpicked = newUnpickedSongs
-	ps.queue = SpotifyShuffle(newQueue)
+	// Distribute songs
+	copy(ps.queue, shuffled[:queueSize])
+	copy(ps.unpicked, shuffled[queueSize:])
 }
 
 func (ps *PickerService) SyncData() {

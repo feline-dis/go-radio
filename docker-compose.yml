@@ -1,0 +1,10 @@
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      # Optional: Use build args for versioning
+    ports:
+      - "8080:8080"
+
+  

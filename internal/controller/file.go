@@ -25,7 +25,7 @@ func NewFileController(r *http.ServeMux, downloadService *download.DownloadServi
 
 func (fc *FileController) RegisterRoutes() {
 	fc.r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fs := http.FileServer(http.Dir("public"))
+		fs := http.FileServer(http.Dir("public_react/dist"))
 
 		fs.ServeHTTP(w, r)
 	})
